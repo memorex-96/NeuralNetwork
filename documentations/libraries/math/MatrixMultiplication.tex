@@ -1,9 +1,71 @@
+
+% dont forget to latexmk -pdf -c MatrixMultiplication.tex
+
 \documentclass{article} 
+%\usepackage{graphicx} 
+\usepackage{fancyhdr} 
+\usepackage{lastpage} 
+\usepackage{amsmath} 
+\usepackage{amssymb} 
+\usepackage[headsep=3em]{geometry} 
+%\usepackage{tabularx} 
+\usepackage{array} 
+\usepackage{comment} 
 
-\title{Matrix Multiplication}
 
-\author{Carson Crowley} 
+\pagestyle{fancy} 
+\fancyhf{} 
+
+\fancyhead[L]{Matrix Multiplication Basics and Neural Networks}
+\fancyhead[R]{\thepage of \pageref{LastPage} \\ Carson Crowley} 
+
+\renewcommand{\thesection}{\Roman{section}} 
+
 
 \begin{document} 
-\maketitle
+
+\begin{center}
+	\text{} 
+	\\[22em] 
+	{\LARGE \textbf{Matrix Multiplication Basics and Neural Networks}} \\[1em] 
+	{\large \textbf{March, 2025}} \\[0.5em] 
+	{\small \textbf{Carson Crowley}} 
+\end{center} 
+
+\thispagestyle{empty} 
+\newpage
+\section{Summary} 
+\textbf{Matrix Multiplication} is a \textbf{binary operation} in which the product of two \(m\cdot n\) matricies (\(A\times B\)) results in a third matrix \(C\). The resultant matrix will have a row size equal to the row size in matrix \(A\), and a column size equal to that of the column size of matrix \(B\).     
+\subsection{Definition of Matrix Multiplication}
+For an \(m\cdot n\) matrix \(A\), and an \(n\cdot p\) matrix \(B\): 
+\begin{equation}
+	A = \begin{pmatrix} a_{11} & a_{12} & \hdots & a_{1n} \\ 
+			    a_{21} & a_{22} & \hdots & a_{2n} \\
+			    \vdots & \vdots & \ddots & \vdots \\ 
+			    a_{m1} & a_{m2} & \hdots & a_{mn} 
+	\end{pmatrix},\text{ } 
+	B = \begin{pmatrix} b_{11} & b_{12} & \hdots & b_{1p} \\
+	 		    b_{21} & b_{22} & \hdots & b_{2p} \\ 
+			    \vdots & \vdots & \ddots & \vdots \\ 
+			    b_{n1} & b_{n2} & \hdots & b_{np} 
+	\end{pmatrix}
+\end{equation} 
+there is a resultant matrix \textbf{\textit{C}} such that \(C\) = \textbf{\textit{AB}}: 
+\begin{equation}
+	C = \begin{pmatrix} c_{11} & c_{12} & \hdots & c_{1p} \\
+			    c_{21} & c_{22} & \hdots & c_{2p} \\ 
+			    \vdots & \vdots & \ddots & \vdots \\ 
+		  	    c_{m1} & c_{m2} & \hdots & c_{mp} 
+	\end{pmatrix} 
+\end{equation} 
+where
+\[C_{ij} = a_{i1}b_{j1} + a_{i2}b_{j2} + \hdots + a_{in}b_{jn} = \sum_{k=1}^{n}a_{ik}b_{kj}\]
+for \(i = 1 \hdots m\) and \(j = 1 \hdots p\). \\[0.5em] 
+Importantly, \(c_{ij}\) is the \textbf{\textit{dot product}} of the \(i^{\text{th}}\) row of \textbf{\textit{A}} and the \(j^{\text{th}}\) column \textbf{\textit{B}}. 
+		
+		% TODO: input the rewritten C matrix dot product of AB 
+
+
+\section{Computational Complexity} 
+
 \end{document}  
