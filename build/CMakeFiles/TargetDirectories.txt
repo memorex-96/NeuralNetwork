@@ -1,0 +1,3 @@
+/home/memorex/AIProject/build/CMakeFiles/AIProject.dir
+/home/memorex/AIProject/build/CMakeFiles/edit_cache.dir
+/home/memorex/AIProject/build/CMakeFiles/rebuild_cache.dir
