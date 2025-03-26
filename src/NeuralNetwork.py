@@ -6,6 +6,6 @@ if platform.system() == "Linux" or "linux2":
     c_libs = ctypes.CDLL("") 
 elif platform.system() == "Windows": 
     print("On Windows")
-    c_libs = ctypes.CDLL() 
+    c_libs = ctypes.CDLL("../build/libAIProject.so") 
 
 
