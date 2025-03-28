@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -shared -Wl,-soname,libAIProject.so -o libAIProject.so CMakeFiles/AIProject.dir/home/memorex/AIProject/libraries/math/MatrixMult.c.o
