@@ -9,3 +9,6 @@ elif platform.system() == "Windows":
     c_libs = ctypes.CDLL("") 
 
 
+#c_libs.testing_shared()
+c_libs.test_SO() 
+

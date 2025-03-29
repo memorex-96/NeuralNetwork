@@ -2,6 +2,11 @@
 #include<stdlib.h> 
 // C_{ij} = \sum_k A_{ik} * B_{jk}
 
+
+void testing_shared () { 
+	printf("Message from MatrixMult.c\n"); 
+} 	
+
 int** multiply_matrix (int** firstArr, int** nextArr, int rows, int cols) { 
 	// rows_result = first_rows, cols_result = second_cols
 	int** result = (int**)malloc(rows * sizeof(int*));
