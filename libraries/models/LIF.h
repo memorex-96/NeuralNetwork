@@ -11,7 +11,9 @@
  *
  * If any set of neurons (A and B) have a strong synapse, the signification 
  * is that their action potetial threshold is lowered for a particular neuron signal.
- * This means that each signal must require a tag. 
+ * This means that each signal must require a tag.
+ *
+ * Need function to create network map. Each Neuron is an object allocated to the heap sizeof(Neuron).  
  */
 extern "C" { 
 	typedef struct Signal { 
