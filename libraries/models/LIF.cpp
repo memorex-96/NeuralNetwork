@@ -1,5 +1,5 @@
 #include "LIF.h"
-
+extern "C" {
 	Neuron::Neuron() {
 	} 
 
@@ -35,7 +35,9 @@
 		while(true) { 
 			std::unique_lock<std::mutex> lock(mtx); 
 			cv.wait(lock, [this] {return neuron_fired; }); // wait until a neuron fires
-			std::cout << "Updating weights...\n"; 
+			std::cout << "Updating weights...\n";
+		       	synapse = synapse + 3;
+			std::cout << "Synapse now: " << synapse << std::endl; 	
 			neuron_fired = false; 
 		}	 	
 	} 
@@ -47,6 +49,7 @@
 			if (potential > 0) { 
 				potential = potential - 0.5; // small decay over time 
 				std::cout << "Leakeage: Potential now " << potential << std::endl; 
+
 			} 
 		} 
 	}
@@ -66,3 +69,4 @@
 	
 		return 0; 
 	}
+} 

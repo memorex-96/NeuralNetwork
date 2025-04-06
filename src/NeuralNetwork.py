@@ -13,5 +13,5 @@ elif platform.system() == "Windows":
 c_libs.test_SO() 
 
 
-class Neuron(ctypes.Structure): 
+#class Neuron(ctypes.Structure): 
 
