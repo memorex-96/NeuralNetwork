@@ -1,26 +1,16 @@
-#include<iostream>
-#include<thread>
-#include<mutex>
-#include<atomic>
-#include<condition_variable>
-#include<chrono> 
+#include "LIF.h"
 
-extern "C" {
-	std::mutex mtx; 
-	std::condition_variable cv; 
-	std::atomic<double> potential = 0.0; 
-	const double THRESHOLD = 16.0; 
-	bool neuron_fired = false;
+	Neuron::Neuron() {
+	} 
 
-
-	void test_SO () {
+	void Neuron::test_SO () {
 		std::cout << "Message From LIF.cpp" << std::endl; 
 	} 
 
-	void threshold_checker() { 
+	void Neuron::threshhold_checker() { 
 		std::unique_lock<std::mutex> lock(mtx);   // create thread lock  
 		while (true) { 
-			cv.wait(lock, [] {return potential >= THRESHOLD;} ); //wait until the threshold is reached
+			cv.wait(lock, [this] {return potential >= THRESHHOLD;} ); //wait until the threshold is reached
 			neuron_fired = true; 
 	       		std::cout << "Neuron fired! Resetting potential.\n"; 
 			potential = 0.0; 
@@ -28,29 +18,29 @@ extern "C" {
 		} 
 	} 
 
-	void accumulator() { 
+	void Neuron::accumulator() { 
 		while(true) { 
 			std::this_thread::sleep_for(std::chrono::milliseconds(100)); //input delay, refractory
 			potential = potential + 3.30; //accumulation 
 			std::cout << "Potential: " << potential << std::endl; 
 
-			if (potential >= THRESHOLD) { 
+			if (potential >= THRESHHOLD) { 
 				std::lock_guard<std::mutex> lock(mtx); 
 				cv.notify_one(); //notify threshold checker
 			} 
 		}
 	} 
 
-	void weight_updater() { 
+	void Neuron::weight_updater() { 
 		while(true) { 
 			std::unique_lock<std::mutex> lock(mtx); 
-			cv.wait(lock, [] {return neuron_fired; }); // wait until a neuron fires
+			cv.wait(lock, [this] {return neuron_fired; }); // wait until a neuron fires
 			std::cout << "Updating weights...\n"; 
 			neuron_fired = false; 
 		}	 	
 	} 
 
-	void decay() { 
+	void Neuron::decay() { 
 		while (true) { 
 			std::this_thread::sleep_for(std::chrono::milliseconds(200)); // Decay rate
 		
@@ -60,31 +50,19 @@ extern "C" {
 			} 
 		} 
 	}
-/*
-void test_acc () { 
-	while (potential  < THRESHOLD) { 
-		potential = potential + 3.30; 
-		std::cout << "Test_ACC Potential " << potential << std::endl; 	
-	} 
-}*/  
 
 
 	int main() {
-	
-       		std::thread t1(accumulator); 
-		std::thread t2(decay); 
-		std::thread t3(weight_updater); 
-		std::thread t4(threshold_checker); 
+		Neuron n;  	
+       		std::thread t1(&Neuron::accumulator, &n); 
+		std::thread t2(&Neuron::decay, &n); 
+		std::thread t3(&Neuron::weight_updater, &n); 
+		std::thread t4(&Neuron::threshhold_checker, &n); 
 
 		t1.join(); 
 		t2.join(); 
 		t3.join(); 
 		t4.join(); 
 	
-	/*
-	std::cout << "Potential Before test acc " << potential << std::endl; 	
-	test_acc(); 
-	std::cout << "Potential After test_Acc " << potential << std::endl; */ 	
 		return 0; 
 	}
-}
