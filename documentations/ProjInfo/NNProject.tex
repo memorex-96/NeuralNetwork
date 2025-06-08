@@ -1,5 +1,5 @@
 \documentclass{article} 
-
+\usepackage{amsmath}
 \title{Neural Network Project Information}
 \author{Carson Crowley}
 
@@ -15,4 +15,55 @@
 	\item Build information. 
 \end{itemize} 
 
+\section*{Design Ideas}
+\subsection*{Neuron and Neuron Clusters}
+\textbf{Overview of Neuron}\\[0.5em]
+A neuron acts as an I/O machine gaining input from data (\textit{if it is the first layer}) or neurons from higher-up layers. If a neuron recieves input from neurons in higher-up layers, randomized weights will be calculated for the synapse and used in the activation function for that current neuron (where j represenents the current neuron): 
+\[V_j(t) = \sum_{i=1}^{n}x_i(t)\cdot \omega_{ij} - \text{leak}\]
+where
+\begin{itemize} 
+	  \item	\(x_i(t) \in {0,1}\): spike from presynaptic neuron (in previous layer) at time \textit{t}
+	  \item \(w_{ij}\): synaptic weight from neuron \textit{i} to \textit{j} 
+\item \textit{leak} is a constant factor subtracted from the membrane to show decay.
+\end{itemize}
+		   
+For the neuron to spike it must follow that: \\
+\begin{equation} 
+	\text{spike}_j(t) = 
+	\begin{cases}
+		1 & \text{if } V_j(t) \geq \theta \\ 
+		0 & \text{otherwise} \\  
+	\end{cases} 
+\end{equation}
+where \(\theta\) represents the \textit{threshold potential}. \\[0.5em] 
+
+\textbf{Neuron Clusters and Associations} 
+Let's say we have a Neural Network comprised of three layers: 
+\begin{enumerate} 
+	\item Input/Data Layer 
+	\item Layer 2 
+	\item Layer 3 
+\end{enumerate}
+The input data layer (first layer) acts as the initial neuron layer where neurons will activate based directly on the data given. The next layer is the first layer where \textit{associations} will begin to occur. In this layer, each neuron obtains an input bridge (synapse) from each neuron in the previous layer. The strength of the input bridge will determine how likely any neuron in that next layer will fire, after receiving input from any previous activated neuron. This means that if any neuron in the next layer fires often after certain neurons in the first layer fired, that neuron in the next layer will then have created an \textit{association} based off what neurons fired in the previous layer. \\[0.5em]
+\textbf{EDITOR'S NOTE}: Have to research if it should be allowed for a neuron to fire in the next layer if only recieving activation input from only one neuron in the previous layer. \\[0.5em] 
+\textbf{Example with data}: \\ 
+	An image is simply a pixel matrix. In this case, we have an image consising of pixels that can only show gradients between black and white. In the pixel matrix, the value for each pixel follows that \(0 \leq x \leq 10\) where 0 represents black and 10 represents white. An image of a white line upon a black background in a 9x9 pixel matrix is given:\begin{verbatim}
+	image = {{0,0,0}, 
+	         {10,10,10}, 
+		 {0,0,0}}; 
+	\end{verbatim}   
+ The neural network in this case, will have 9 neurons in the input layer (n(letter) represents a neuron): 
+ \begin{verbatim}
+ 	[0,0,0,10,10,10,0,0,0]
+
+      A, B, C, D, E, F, G, H, I     (Each neuron only recieves an input of 1)
+ \end{verbatim}
+ The next layer, may only have 5 neurons (just as an example) and has inputs from each neuron in the first input layer: 
+ \begin{verbatim}
+ 	A, B, C, D, E, F, G, H, I 
+
+	      J, K, L, M, N 
+ \end{verbatim}
+ In this case, neurons from the input layer: D, E, F will fire representing pixel activations in those regions of the image. If for example, neuron J had a stronger synapse than the rest of the neurons and fired after recieving input from D, E, and F, neuron J has then made an \textit{association} for recognizing the shape of a line. \\[0.5em] 
+ If the network was larger and the image was more advanced, you will have layers that function as modules for making particular associations. Layer 2 could be a layer for recognizing edges, while layer 3 recognizes shapes. Any subsequent layer will make deeper connections until it is certain it knows what it is processing. 
 \end{document}  

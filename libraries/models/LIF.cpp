@@ -1,5 +1,6 @@
 #include "LIF.h"
 extern "C" {
+	
 	Neuron::Neuron() {
 	} 
 
