@@ -4,9 +4,6 @@ extern "C" {
 	Neuron::Neuron() {
 	} 
 
-	void Neuron::test_SO () {
-		std::cout << "Message From LIF.cpp" << std::endl; 
-	} 
 
 	void Neuron::threshhold_checker() { 
 		std::unique_lock<std::mutex> lock(mtx);   // create thread lock  
@@ -22,7 +19,7 @@ extern "C" {
 	void Neuron::accumulator() { 
 		while(true) { 
 			std::this_thread::sleep_for(std::chrono::milliseconds(100)); //input delay, refractory
-			potential = potential + 3.30; //accumulation 
+			potential = potential + acc_rate ; //increase by acc_rate 
 			std::cout << "Potential: " << potential << std::endl; 
 
 			if (potential >= THRESHHOLD) { 
@@ -37,7 +34,7 @@ extern "C" {
 			std::unique_lock<std::mutex> lock(mtx); 
 			cv.wait(lock, [this] {return neuron_fired; }); // wait until a neuron fires
 			std::cout << "Updating weights...\n";
-		       	synapse = synapse + 3;
+		       	synapse = synapse + 3;				// need to check tags of what inputs caused this neuron to fire. 
 			std::cout << "Synapse now: " << synapse << std::endl; 	
 			neuron_fired = false; 
 		}	 	
