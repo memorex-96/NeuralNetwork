@@ -17,6 +17,8 @@
 // Need to model link (synaspe) between neurons from one particular layer.
 // Might need a Class to model the synapse. 
 
+double threshold = 16.0;	 
+
 class Neuron {
        	private:
 	       	int tag_id; 	
@@ -32,8 +34,9 @@ class Neuron {
 				
 		}
 		
-		void GetSynapseWeight () { 
-			std::cout << "Synapse from Neuron " <<  tag_id << " Weight: " << syn_weight << std::endl;  
+		bool get_fired_state () {
+		       	std::cout << "Neuron: " << tag_id << ", Fired State: " << fired_state << std::endl; 	
+			return fired_state; 
 		} 	
 }; 
 
@@ -51,7 +54,14 @@ class Synapse {
 		} 	
 		
 		void adjust_weight () { 
-			// update weight, get formula 	
+			// update weight, get formula
+			// V_j(t) = \sum^{n}_{i=1} x_i(t) \cdot \omega_{ij} - leak 
+			// where: 
+			// 	x_i(t) \in [0,1]: spike from presynaptic neuron at time t
+			// 	\omega_{ij}: synaptic weight from neuron i to j 
+			// 	leak: is the const factor 
+			
+	
 		} 
 		
 		double get_synapse_weight () { 
@@ -63,7 +73,6 @@ class Synapse {
 
 int main () {
        	Neuron* n = new Neuron(1, 0.05); 
-	n->GetSynapseWeight();
 		
 	// input data test with pixel matrix (each value is a gradient 0-10 to 0:black, 10:white; 
 	
