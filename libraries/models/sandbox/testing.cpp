@@ -12,25 +12,25 @@
 #include<condition_variable> 
 #include<chrono>
 //vector to sim layers 
-#include<vector> 
+#include<vector>
+#include<memory> 
 
 // Need to model link (synaspe) between neurons from one particular layer.
-// Might need a Class to model the synapse. 
+// Might need a Class to model the synapse.
+ 
 
 double threshold = 16.0;	 
 
 class Neuron {
        	private:
 	       	int tag_id; 	
-		double syn_weight;	// value determines neuron activation
 		bool fired_state;  	// may change if output info isn't binary. 	
 	       	// need to link automatically between layers 	
 			
 	public:
 	       	// in constructor, need list of pointers to Neurons	
-		Neuron(int tag_id, double syn_weight) {  	
+		Neuron(int tag_id) {  	
 			this->tag_id = tag_id;  
-			this->syn_weight = syn_weight; 
 				
 		}
 		
@@ -40,9 +40,9 @@ class Neuron {
 		} 	
 }; 
 
-class Synapse { 
+class Synapse {
+       // input pass through synapse causes firing 	
 	private:
-	//	std::vector<Neuron*> layer;  // each synapse only needs two neurons	
 		Neuron* last; 
 		Neuron* next;
 	       	double weight; 	
@@ -72,8 +72,24 @@ class Synapse {
 }; 
 
 int main () {
-       	Neuron* n = new Neuron(1, 0.05); 
-		
+       	
+	int img_size = 9; 	
+	// list of smart pointers to allocated heap mem of a neuron to act as layer 	
+	std::vector<std::make_unique<Neuron>> layer_one; 
+	
+	for ( int i = 0; i < img_size; i++ ) { 
+		layer_one.push_back(std::make_unique<Neuron>(i));  
+			
+	} 	
+
+	// need to create synaptic connection between neurons in layers 
+
+
+
+
+
+
+
 	// input data test with pixel matrix (each value is a gradient 0-10 to 0:black, 10:white; 
 	
 	int image[3][3] = {{0,0,0}, {10,10,10},{0,0,0}}; // image representing white line on black background: 3x3 image. 
