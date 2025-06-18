@@ -20,6 +20,9 @@ class Neuron {
 		Neuron (int tag_id) {
 			this->tag_id = tag_id; 	
 		}
+		
+		// need input getter; first layer neurons will recieve range of inputs (not discrete)  
+		// need activation function 
 
 		bool get_fired_state () { 
 			std::cout << "Neuron: " << tag_id << ", Fired State: " << fired_state << std::endl; 
@@ -40,12 +43,11 @@ class Synapse {
 		}
 
 		void adjust_weight () { 
-			// update weight, get formula 
-			// V_j(t) = \sum^{n}_{i=1} x_i(t) \cdot \omega_{ij} - leak 
-			// where: 
-			// 	x_i(t) \in [0,1]: spike from presynaptic neuron at time t
-			// 	\omega_{ij}: synaptic weight from  neuron i to j 
-			// 	leak: const factor
+			
+		        if (last->get_fired_state() == true && next->get_fired_state() == true) { 
+				weight += 0.3; 						// overtime consistent sequential firings build associations
+			}
+		       	else return; 	
 		} 
 
 		double get_synapse_weight () { 
@@ -59,6 +61,10 @@ class Synapse {
  *  	adjust_weight has firing formula: 
  *  
  * 	 V_j(t) = \sum^{n}_{i=1} x_i(t) \cdot \omega_{ij} - leak
+ *	 where: 
+ *	 	x_i(t) \in [0,1]: spike from presynaptic neuron at time t
+ *       	\omega_{ij}: synaptic weight from neuron i to j 
+ *              leak: const factor
  *
  *  	The value of V_j at time t will be compared to THRESHOLD: 
  *  		if V_j > THRESHOLD -> j fires = 1 
