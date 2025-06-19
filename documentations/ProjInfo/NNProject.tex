@@ -1,12 +1,37 @@
 \documentclass{article} 
-\usepackage{amsmath}
-\title{Neural Network Project Information}
-\author{Carson Crowley}
+\usepackage{amsmath} 
+\usepackage{amssymb} 
+\usepackage{fancyhdr} 
+\usepackage{lastpage}
+\usepackage[headsep=3em]{geometry}
+\usepackage{array} 
+\usepackage{comment} 
+
+\pagestyle{fancy} 
+\fancyhf{} 
+
+\fancyhead[L]{LIF Neural Network Project Information}
+\fancyhead[R]{\thepage of \pageref{LastPage} \\ Carson Crowley} 
+
+\renewcommand{\thesection}{\Roman{section}}
+%\title{Neural Network Project Information}
+%\author{Carson Crowley}
 
 \begin{document} 
-\maketitle
+%\maketitle
 
-\section*{Info}
+\begin{center} 
+	\text{} 
+	\\[22em] 
+	{\LARGE \textbf{LIF Neural Network Project Information}} \\[1em] 
+	{\large \textbf{June, 2025}} \\[0.5em] 
+	{\small \textbf{Carson Crowley}} 
+\end{center} 
+
+\thispagestyle{empty}
+\newpage
+
+\section{Info}
 \LaTeX documents will contain information regarding various aspects of this project. These documents will contain information on: 
 \begin{itemize}
 	\item How the Neural Network works. 
@@ -37,33 +62,8 @@ For the neuron to spike it must follow that: \\
 \end{equation}
 where \(\theta\) represents the \textit{threshold potential}. \\[0.5em] 
 
-\textbf{Neuron Clusters and Associations} 
-Let's say we have a Neural Network comprised of three layers: 
-\begin{enumerate} 
-	\item Input/Data Layer 
-	\item Layer 2 
-	\item Layer 3 
-\end{enumerate}
-The input data layer (first layer) acts as the initial neuron layer where neurons will activate based directly on the data given. The next layer is the first layer where \textit{associations} will begin to occur. In this layer, each neuron obtains an input bridge (synapse) from each neuron in the previous layer. The strength of the input bridge will determine how likely any neuron in that next layer will fire, after receiving input from any previous activated neuron. This means that if any neuron in the next layer fires often after certain neurons in the first layer fired, that neuron in the next layer will then have created an \textit{association} based off what neurons fired in the previous layer. \\[0.5em]
-\textbf{EDITOR'S NOTE}: Have to research if it should be allowed for a neuron to fire in the next layer if only recieving activation input from only one neuron in the previous layer. \\[0.5em] 
-\textbf{Example with data}: \\ 
-	An image is simply a pixel matrix. In this case, we have an image consising of pixels that can only show gradients between black and white. In the pixel matrix, the value for each pixel follows that \(0 \leq x \leq 10\) where 0 represents black and 10 represents white. An image of a white line upon a black background in a 9x9 pixel matrix is given:\begin{verbatim}
-	image = {{0,0,0}, 
-	         {10,10,10}, 
-		 {0,0,0}}; 
-	\end{verbatim}   
- The neural network in this case, will have 9 neurons in the input layer (n(letter) represents a neuron): 
- \begin{verbatim}
- 	[0,0,0,10,10,10,0,0,0]
-
-      A, B, C, D, E, F, G, H, I     (Each neuron only recieves an input of 1)
- \end{verbatim}
- The next layer, may only have 5 neurons (just as an example) and has inputs from each neuron in the first input layer: 
- \begin{verbatim}
- 	A, B, C, D, E, F, G, H, I 
-
-	      J, K, L, M, N 
- \end{verbatim}
- In this case, neurons from the input layer: D, E, F will fire representing pixel activations in those regions of the image. If for example, neuron J had a stronger synapse than the rest of the neurons and fired after recieving input from D, E, and F, neuron J has then made an \textit{association} for recognizing the shape of a line. \\[0.5em] 
- If the network was larger and the image was more advanced, you will have layers that function as modules for making particular associations. Layer 2 could be a layer for recognizing edges, while layer 3 recognizes shapes. Any subsequent layer will make deeper connections until it is certain it knows what it is processing. 
-\end{document}  
+\textbf{Neuron Clusters and Associations}\\[1em]
+If it follows that \(V_j(t) \geq \theta\), then the neuron \textit{i} or \textit{j} (or any neuron) will fire with a value of 1. The activation function represented by \(V_{\text{tag}}(t)\) represents the electrical charge accumulation within a neuron over time. If that charge surpasses a threshold (\(\theta\)), the neuron is thought to \textit{spike}.\\[0.5em] 
+Neurons are held together by \textit{synapses} which act as bridges between a sender neuron and a reciever neuron. These bridges between neurons transmits an electrical signal between any sender and reciever, and contains a strength parameter to allow for associations to be formed. \\[1em] 
+\textbf{An association} between any two neurons is modelled as a \textit{likelihood} for any neuron to fire after reciving input from a preceeding neuron. The activation function: \(V_{\text{j}}(t) = \sum_{i=1}^{n}x_i(t)\cdot \omega_{ij} - \text{leak}\) sums the product of the previous neuron (\textit{neuron i}) with the synaptic weight value between the neurons \text{i and j} (with the difference of a \textit{leak} factor). The stronger the \(\omega\) value is between neurons \textit{i and j}, the more likely neuron \textit{j} will fire subsequently. This weight factor allows any neuron to formulate an association to a pattern. So if neuron \textit{j} has a stronger \(\omega\) value with neurons \textit{i, k, and l}, neuron \textit{j} will, over time, serve the purpose of recognizing whatever pattern \textit{i, k, and l} represent.  
+\end{document} 
