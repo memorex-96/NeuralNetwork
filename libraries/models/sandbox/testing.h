@@ -9,8 +9,10 @@
 #include<vector> 
 #include<memory> 
 
-
+// arbitrary; up to change
 #define THRESHOLD 16.0 
+#define LEAK 0.3
+
 
 class Neuron { 
 	private: 
@@ -20,13 +22,21 @@ class Neuron {
 		Neuron (int tag_id) {
 			this->tag_id = tag_id; 	
 		}
-		
-		// need input getter; first layer neurons will recieve range of inputs (not discrete)  
-		// need activation function 
-
+		 
 		bool get_fired_state () { 
 			std::cout << "Neuron: " << tag_id << ", Fired State: " << fired_state << std::endl; 
 			return fired_state; 
+		}
+		
+		void activation_value (double syn_weight, int prev_val) { 
+			// func: prev_val[0,1] 
+			// 	 synapse weight 
+			// 	 - leak 
+			double activation_value = (prev_val * syn_weight) - LEAK;  
+
+			if (activation_value >= THRESHOLD) { 
+				fired_state = true; 
+			} 
 		} 	
 }; 
 
