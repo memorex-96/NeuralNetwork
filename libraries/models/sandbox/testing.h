@@ -14,15 +14,20 @@
 #define LEAK 0.3
 
 
+
 class Neuron { 
 	private: 
 		int tag_id; 
-		bool fired_state; 
+		bool fired_state;
+		int state;
+
+		// accumulator 
+		// decay by leak factor 	
 	public: 
 		Neuron (int tag_id) {
 			this->tag_id = tag_id; 	
 		}
-		 
+					
 		bool get_fired_state () { 
 			std::cout << "Neuron: " << tag_id << ", Fired State: " << fired_state << std::endl; 
 			return fired_state; 
@@ -31,12 +36,35 @@ class Neuron {
 		void activation_value (double syn_weight, int prev_val) { 
 			// func: prev_val[0,1] 
 			// 	 synapse weight 
-			// 	 - leak 
-			double activation_value = (prev_val * syn_weight) - LEAK;  
+			// 	 - leak
+
+
+			double activation_value; 
+			
+			if (syn_weight == -1) { 
+				activation_value = prev_val - LEAK; 	
+			} else if (syn_weight > -1) { 
+
+				activation_value = (prev_val * syn_weight) - LEAK;  
+			} 
+
+			std::cout << "activation_value: " << activation_value << std::endl;
 
 			if (activation_value >= THRESHOLD) { 
+				std::cout << "Fired!" << std::endl; 	
 				fired_state = true; 
 			} 
+		}
+	       	
+		int set_state () { 
+			if (this->fired_state == true) { 
+				this->state = 1; 
+			}
+		       	return this->state; 	
+		} 	
+
+		void get_tag () { 
+			std::cout << tag_id << std::endl; 
 		} 	
 }; 
 
@@ -45,12 +73,20 @@ class Synapse {
 		Neuron* last; 
 		Neuron* next; 
 		double weight; 
-	private: 
+	public: 
 		Synapse (Neuron* last, Neuron* next, double weight) { 
 			this->last = last; 
 			this->next = next; 
 			this->weight = weight; 
 		}
+
+		// pass input from last neuron 
+		int get_prev_input (int input ) { 
+			if (input > 0 ) return input; 
+		       	else { 
+				std::cout << "prev Neuron didn't fire" << std::endl; 
+			} 	
+		} 
 
 		void adjust_weight () { 
 			
@@ -63,7 +99,14 @@ class Synapse {
 		double get_synapse_weight () { 
 			std::cout << "Weight: " << weight << std::endl; 
 			return weight; 
-		} 		
+		} 	
+
+		
+
+		void bridge () {
+		       last->get_tag(); 
+	       	       next->get_tag(); 	       
+		} 	
 };
 
 

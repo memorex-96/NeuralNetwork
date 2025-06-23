@@ -3,6 +3,21 @@
  * Neuron documentation.   */
 
 #include "testing.h" 
+#include<random> 
+
+
+double randomize_weights () { 
+	double rand_num;
+
+	std::random_device rd; 
+	std::mt19937 gen(rd()); 
+	std::uniform_real_distribution<> distr(0.0, 0.5); // up to change 	
+	
+	rand_num = distr(gen);
+
+	std::cout << "Random Number: " << rand_num << std::endl; 		
+	return rand_num; 	
+} 
 
 
 int main () {
@@ -19,8 +34,21 @@ int main () {
 	// need to create synaptic connection between neurons in layers 
 
 
+	Neuron* n1 = new Neuron(1); 
+	Neuron* n2 = new Neuron(2); 
+	
 
+	double rand_weight = randomize_weights();
 
+	Synapse* s = new Synapse(n1, n2, rand_weight); 
+	
+	n1->activation_value(1, 10);
+      	s->adjust_weight(); 
+	n2->activation_value(s->get_synapse_weight(), n1->set_state());  	
+
+       //	s->bridge(); 
+
+	
 
 
 
