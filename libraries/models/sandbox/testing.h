@@ -14,6 +14,12 @@
 #define LEAK 0.3
 
 
+/* Potential >= THRESHHOLD -> fire, 
+ * DECAY: 0.005 every 1000 milliseconds. Sets potential of Neuron to zero over time if no firing. 
+ * Neurons recieves input, if 0 input, no firing.
+ * */
+
+
 
 class Neuron { 
 	private: 
@@ -21,7 +27,8 @@ class Neuron {
 		bool fired_state;
 		int state;
 
-	        std::atomic<double> potential; 
+	        std::atomic<double> potential;
+	       	 	
 		// accumulator 
 		// decay by leak factor 	
 	public: 
@@ -33,20 +40,12 @@ class Neuron {
 			std::cout << "Neuron: " << tag_id << ", Fired State: " << fired_state << std::endl; 
 			return fired_state; 
 		}
-			
-		void accumulator () { 
-			while (true) { 
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-			       potential = potential + 0.003; 
-		       		std::cout << "Neuron: " << tag_id << " Potential: " << potential << std::endl; 
-
-			} 	
-		}  	
+		 	
 		void decay () { 
 			while (true) { 
 				std::this_thread::sleep_for(std::chrono::milliseconds(1000)); 
 				if (potential > 0) { 
-					potential = potential - 0.05; 
+					potential = potential - 0.005; 
 					std::cout << "Neuron: " << tag_id << " Decay...Potential now: " << potential << std::endl; 
 				} 
 			} 
@@ -56,19 +55,16 @@ class Neuron {
 			// 	 synapse weight 
 			// 	 - leak
 
-
-			double activation_value; 
 			
 			if (syn_weight == -1) { 
-				activation_value = (prev_val + potential);   	
+				this->potential = prev_val;   	
 			} else if (syn_weight > -1) { 
-
-				activation_value = ((potential + prev_val) * syn_weight);  
+				potential = prev_val * syn_weight;  
 			} 
 
-			std::cout << "activation_value: " << activation_value << std::endl;
+			std::cout << "potential: " << potential << std::endl;
 
-			if (activation_value >= THRESHOLD) { 
+			if (potential >= THRESHOLD) { 
 				std::cout << "Fired!" << std::endl; 	
 				fired_state = true;
 			       	potential = 0; 	
