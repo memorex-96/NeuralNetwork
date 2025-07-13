@@ -74,7 +74,7 @@ class Neuron {
 		int set_state () { 
 			if (this->fired_state == true) { 
 				this->state = 1; 
-			}
+			} else {this->state = -1;}  
 		       	return this->state; 	
 		} 	
 
