@@ -7,12 +7,13 @@
 #include<condition_variable>
 #include<chrono> 
 #include<vector> 
-#include<memory> 
+#include<memory>
+#include<random> 
 
 // arbitrary; up to change
-#define THRESHOLD 16.0 
-#define LEAK 0.3
-
+#define THRESHHOLD 16.0 
+#define LEAK 0.000003
+#define RESET 0 
 
 /* Potential >= THRESHHOLD -> fire, 
  * DECAY: 0.005 every 1000 milliseconds. Sets potential of Neuron to zero over time if no firing. 
@@ -27,8 +28,8 @@ class Neuron {
 		bool fired_state;
 		int state;
 
-	        std::atomic<double> potential;
-	       	 	
+	        //std::atomic<double> potential;
+	       	double potential;  	
 		// accumulator 
 		// decay by leak factor 	
 	public: 
@@ -40,34 +41,42 @@ class Neuron {
 			std::cout << "Neuron: " << tag_id << ", Fired State: " << fired_state << std::endl; 
 			return fired_state; 
 		}
-		 	
-		void decay () { 
-			while (true) { 
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000)); 
-				if (potential > 0) { 
-					potential = potential - 0.005; 
-					std::cout << "Neuron: " << tag_id << " Decay...Potential now: " << potential << std::endl; 
-				} 
-			} 
-		} 
-		void activation_value (double syn_weight, int prev_val) { 
+
+		void accumulator () {				// this is to run once per loop  
+			if (this->potential < THRESHHOLD) {  
+				double rand_num; 
+				std::random_device rd; 
+				std::mt19937 gen(rd());
+				std::uniform_real_distribution<> distr(0.0, 0.0003); 
+				
+				rand_num = distr(gen); 
+				
+				std::cout << "Accumulated: " << rand_num << std::endl;				
+				this->potential = potential + rand_num;
+				std::cout << "Potential: " << this->potential << std::endl; 
+			} else { return; }  
+		       		
+		} 	
+
+
+		void activation_value (double syn_weight, int prev_val) {	//first layer is integer input  
 			// func: prev_val[0,1] 
 			// 	 synapse weight 
 			// 	 - leak
 
 			
-			if (syn_weight == -1) { 
+			if (syn_weight == -1) {			// if synapse DNE (first layer Neurons)  
 				this->potential = prev_val;   	
 			} else if (syn_weight > -1) { 
-				potential = prev_val * syn_weight;  
+				potential = prev_val * syn_weight - LEAK; 	// prev * syn + (pot - leak) 
 			} 
 
 			std::cout << "potential: " << potential << std::endl;
 
-			if (potential >= THRESHOLD) { 
+			if (potential >= THRESHHOLD) { 
 				std::cout << "Fired!" << std::endl; 	
 				fired_state = true;
-			       	potential = 0; 	
+			       	potential = RESET; 	
 			} 
 		}
 	       	
@@ -78,8 +87,9 @@ class Neuron {
 		       	return this->state; 	
 		} 	
 
-		void get_tag () { 
-			std::cout << tag_id << std::endl; 
+		int get_tag () { 
+			std::cout << tag_id << std::endl;
+		       	return this->tag_id; 	
 		} 	
 }; 
 
@@ -115,8 +125,6 @@ class Synapse {
 			std::cout << "Weight: " << weight << std::endl; 
 			return weight; 
 		} 	
-
-		
 
 		void bridge () {
 		       last->get_tag(); 

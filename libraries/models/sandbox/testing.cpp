@@ -3,7 +3,7 @@
  * Neuron documentation.   */
 
 #include "testing.h" 
-#include<random> 
+
 
 
 double randomize_weights () { 
@@ -41,11 +41,33 @@ int main () {
 	double rand_weight = randomize_weights();
 
 	Synapse* s = new Synapse(n1, n2, rand_weight); 
-	
+
+	int val1 = 1; 
+	int val2 = 10; 
+
+	for (int i = 0; i < 5; i++) { 
+		if (i > 0 ) { 
+			val1 = n2->set_state(); 
+			val2 = s->get_synapse_weight(); 
+		} 
+
+		n1->accumulator();
+	       	n2->accumulator(); 
+
+		n1->activation_value(val1, val2); 
+		s->adjust_weight(); 
+		n2->activation_value(s->get_synapse_weight(), n1->set_state()); 		
+	} 	
+ 
+
+
+
+
+	/*
 	n1->activation_value(1, 10);
       	s->adjust_weight(); 
 	n2->activation_value(s->get_synapse_weight(), n1->set_state());  	
-
+*/ 
        //	s->bridge(); 
 
 	
